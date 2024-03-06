@@ -1,0 +1,263 @@
+set echo on
+--dropping all the created tables
+drop table students cascade constraints;
+drop table courses cascade constraints;
+drop table enrollments cascade constraints;
+drop table grades cascade constraints;
+drop table extracurricularactivities cascade constraints ;
+drop table studentactivities cascade constraints;
+drop table activityachievements cascade constraints;
+drop table teachers cascade constraints;
+drop table classes cascade constraints;
+drop table sem1 cascade constraints;
+drop table sem2 cascade constraints;
+
+
+--creating all the tables
+CREATE TABLE students (
+        digital_id NUMBER PRIMARY KEY,
+        name VARCHAR2(250),
+        birth_date DATE,
+        age NUMBER,
+        address VARCHAR2(250),
+        phone NUMBER,
+        gender VARCHAR2(100),
+        year_of_admission NUMBER
+        );
+ 
+CREATE TABLE courses (
+            course_id number primary key,
+            course_name VARCHAR2(250),
+            credits number
+        );
+
+CREATE TABLE enrollments (
+            enrollment_id number primary key,
+            student_id number,
+            course_id number,
+            foreign key (student_id) references students(digital_id) on delete cascade,
+            foreign key (course_id) references courses(course_id) on delete cascade
+        );
+
+ CREATE TABLE grades (
+            grade_id number primary key,
+            enrollment_id number,
+            grade varchar(10),
+            foreign key (enrollment_id) references enrollments(enrollment_id) on delete cascade
+        );
+
+CREATE TABLE extracurricularactivities (
+            activity_id number primary key,
+            activity_name varchar(200),
+            description varchar(200)
+        );
+
+CREATE TABLE studentactivities (
+            activity_id number,
+            student_id number,
+            foreign key (activity_id) references extracurricularactivities(activity_id) on delete cascade,
+            foreign key (student_id) references students(digital_id) on delete cascade
+        );
+
+CREATE TABLE activityachievements (
+            achievement_id number primary key,
+            activity_id number,
+            achievement_description varchar(250),
+            foreign key (activity_id) references extracurricularactivities(activity_id) on delete cascade
+        );
+
+ CREATE TABLE teachers (
+            teacher_id NUMBER PRIMARY KEY,
+            name VARCHAR2(250),
+            qualification varchar(200),
+            phone NUMBER,
+            gender VARCHAR2(100)
+        );
+
+CREATE TABLE classes (
+            class_id number primary key,
+            class_name varchar(100),
+            teacher_id number,
+            foreign key (teacher_id) references teachers(teacher_id) on delete cascade
+        );
+
+CREATE TABLE sem1 (
+            digital_id number,
+            Mathematics1 varchar(10),
+            Physics varchar(10),
+            ComputerScience varchar(10),
+            avg_grade varchar(20),
+            foreign key (digital_id) references students(digital_id) on delete cascade
+        );
+
+CREATE TABLE sem2 (
+            digital_id number,
+            Mathematics2 varchar(10),
+            EnglishLiterature varchar(10),
+            History varchar(10),
+            avg_grade varchar(20),
+            foreign key (digital_id) references students(digital_id) on delete cascade
+        );
+
+-- Insert data into the students table
+INSERT INTO students (digital_id, name, birth_date, age, address, phone, gender, year_of_admission)
+VALUES(1, 'John Doe', TO_DATE('1995-05-15', 'YYYY-MM-DD'), 28, '123 Main St', 5551234, 'Male', 2020);
+INSERT INTO students (digital_id, name, birth_date, age, address, phone, gender, year_of_admission)
+VALUES(2, 'Jane Smith', TO_DATE('1998-08-21', 'YYYY-MM-DD'), 25, '456 Oak St', 5555678, 'Female', 2019);
+INSERT INTO students (digital_id, name, birth_date, age, address, phone, gender, year_of_admission)
+VALUES(3, 'Bob Johnson', TO_DATE('1997-03-10', 'YYYY-MM-DD'), 26, '789 Pine St', 5558765, 'Male', 2021);
+INSERT INTO students (digital_id, name, birth_date, age, address, phone, gender, year_of_admission)
+VALUES(4, 'Alice Brown', TO_DATE('1996-12-03', 'YYYY-MM-DD'), 27, '987 Cedar St', 5554321, 'Female', 2018);
+INSERT INTO students (digital_id, name, birth_date, age, address, phone, gender, year_of_admission)
+VALUES(5, 'Charlie Davis', TO_DATE('1999-06-18', 'YYYY-MM-DD'), 24, '654 Elm St', 5557890, 'Male', 2022);
+
+-- Insert data into the courses table
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(1, 'Mathematics1', 3);
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(2, 'Physics', 4);
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(3, 'Computer Science', 3);
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(4, 'English Literature', 3);
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(5, 'History', 3);
+INSERT INTO courses (course_id, course_name, credits)
+VALUES(6, 'Mathematics2', 3);
+
+-- Insert data into the enrollments table
+INSERT INTO enrollments (enrollment_id, student_id, course_id)
+VALUES(1, 1, 1);
+  -- John Doe enrolled in Mathematics
+INSERT INTO enrollments (enrollment_id, student_id, course_id)
+VALUES(2, 2, 2);
+ -- Jane Smith enrolled in Physics
+INSERT INTO enrollments (enrollment_id, student_id, course_id)
+VALUES(3, 3, 3);
+ -- Bob Johnson enrolled in Computer Science
+INSERT INTO enrollments (enrollment_id, student_id, course_id)
+VALUES(4, 4, 4); 
+ -- Alice Brown enrolled in English Literature
+INSERT INTO enrollments (enrollment_id, student_id, course_id)
+VALUES(5, 5, 5);  
+-- Charlie Davis enrolled in History
+
+-- Insert data into the grades table
+INSERT INTO grades (grade_id, enrollment_id, grade)
+VALUES(1, 1, 'A');
+  -- Grade for John Doe in Mathematics
+INSERT INTO grades (grade_id, enrollment_id, grade)
+VALUES(2, 2, 'B+');
+ -- Grade for Jane Smith in Physics
+INSERT INTO grades (grade_id, enrollment_id, grade)
+VALUES(3, 3, 'A-');
+ -- Grade for Bob Johnson in Computer Science
+INSERT INTO grades (grade_id, enrollment_id, grade)
+VALUES(4, 4, 'B');
+  -- Grade for Alice Brown in English Literature
+INSERT INTO grades (grade_id, enrollment_id, grade)
+VALUES(5, 5, 'C+');
+ -- Grade for Charlie Davis in History
+
+-- Insert data into the extracurricularactivities table
+INSERT INTO extracurricularactivities (activity_id, activity_name, description)
+VALUES(1, 'Sports Club', 'Participate in various sports activities');
+INSERT INTO extracurricularactivities (activity_id, activity_name, description)
+VALUES(2, 'Debating Society', 'Engage in debates and discussions');
+INSERT INTO extracurricularactivities (activity_id, activity_name, description)
+VALUES(3, 'Art Club', 'Express creativity through art and design');
+INSERT INTO extracurricularactivities (activity_id, activity_name, description)
+VALUES(4, 'Music Ensemble', 'Play and perform music with fellow students');
+INSERT INTO extracurricularactivities (activity_id, activity_name, description)
+VALUES(5, 'Science Club', 'Explore and conduct experiments in science');
+  -- Add more rows as needed
+
+-- Insert data into the studentactivities table
+INSERT INTO studentactivities (activity_id, student_id)
+VALUES(1, 1);
+  -- John Doe participating in Sports Club
+INSERT INTO studentactivities (activity_id, student_id)
+VALUES(2, 2);
+  -- Jane Smith participating in Debating Society
+INSERT INTO studentactivities (activity_id, student_id)
+VALUES(3, 3);
+  -- Bob Johnson participating in Art Club
+INSERT INTO studentactivities (activity_id, student_id)
+VALUES(4, 4);
+  -- Alice Brown participating in Music Ensemble
+INSERT INTO studentactivities (activity_id, student_id)
+VALUES(5, 5);  
+-- Charlie Davis participating in Science Club
+
+
+-- Insert data into the activityachievements table
+INSERT INTO activityachievements (achievement_id, activity_id, achievement_description)
+VALUES(1, 1, 'Won first place in the annual sports competition');
+INSERT INTO activityachievements (achievement_id, activity_id, achievement_description)
+VALUES(2, 2, 'Best debater in the inter-school debating championship');
+INSERT INTO activityachievements (achievement_id, activity_id, achievement_description)
+VALUES(3, 3, 'Featured in an art exhibition for outstanding artwork');
+INSERT INTO activityachievements (achievement_id, activity_id, achievement_description)
+VALUES(4, 4, 'Performed at the school music concert');
+INSERT INTO activityachievements (achievement_id, activity_id, achievement_description)
+VALUES(5, 5, 'Presented a science project at the regional science fair');
+  -- Add more rows as needed
+
+-- Insert data into the teachers table
+INSERT INTO teachers (teacher_id, name, qualification, phone, gender)
+VALUES(1, 'Mr. Johnson', 'Ph.D. in Mathematics', 5551234, 'Male');
+INSERT INTO teachers (teacher_id, name, qualification, phone, gender)
+VALUES(2, 'Dr. Smith', 'M.Sc. in Physics', 5555678, 'Male');
+INSERT INTO teachers (teacher_id, name, qualification, phone, gender)
+VALUES(3, 'Mrs. Davis', 'M.A. in English Literature', 5558765, 'Female');
+INSERT INTO teachers (teacher_id, name, qualification, phone, gender)
+VALUES(4, 'Ms. Brown', 'Ph.D. in Computer Science', 5554321, 'Female');
+INSERT INTO teachers (teacher_id, name, qualification, phone, gender)
+VALUES(5, 'Prof. White', 'M.A. in History', 5557890, 'Male');
+  -- Add more rows as needed
+
+-- Insert data into the classes table
+INSERT INTO classes (class_id, class_name, teacher_id)
+VALUES(1, 'Mathematics 101', 1);
+  -- Mr. Johnson teaches Mathematics 101
+INSERT INTO classes (class_id, class_name, teacher_id)
+VALUES(2, 'Physics 201', 2);
+  -- Dr. Smith teaches Physics 201
+INSERT INTO classes (class_id, class_name, teacher_id)
+VALUES(3, 'English 102', 3);
+  -- Mrs. Davis teaches English 102
+INSERT INTO classes (class_id, class_name, teacher_id)
+VALUES(4, 'Computer Science 301', 4);
+ -- Ms. Brown teaches Computer Science 301
+INSERT INTO classes (class_id, class_name, teacher_id)
+VALUES(5, 'History 202', 5);      -- Prof. White teaches History 202
+  -- Add more rows as needed
+
+-- Insert data into the sem1 table
+INSERT INTO sem1 (digital_id, Mathematics1, Physics, ComputerScience, avg_grade)
+VALUES(1, 'A', 'B+', 'A-', 'A-');
+INSERT INTO sem1 (digital_id, Mathematics1, Physics, ComputerScience, avg_grade)
+VALUES(2, 'B', 'A', 'B', 'B+');
+INSERT INTO sem1 (digital_id, Mathematics1, Physics, ComputerScience, avg_grade)
+VALUES(3, 'A-', 'B', 'C', 'B-');
+INSERT INTO sem1 (digital_id, Mathematics1, Physics, ComputerScience, avg_grade)
+VALUES(4, 'B+', 'A-', 'B', 'B');
+INSERT INTO sem1 (digital_id, Mathematics1, Physics, ComputerScience, avg_grade)
+VALUES(5, 'C+', 'B', 'C-', 'C');
+  -- Add more rows as needed
+
+
+-- Insert data into the sem2 table
+INSERT INTO sem2 (digital_id, Mathematics2, EnglishLiterature, History, avg_grade)
+VALUES(1, 'B+', 'A', 'A-', 'A-');
+INSERT INTO sem2 (digital_id, Mathematics2, EnglishLiterature, History, avg_grade)
+VALUES(2, 'A', 'B', 'B+', 'A-');
+INSERT INTO sem2 (digital_id, Mathematics2, EnglishLiterature, History, avg_grade)
+VALUES(3, 'C', 'B-', 'C', 'C+');
+INSERT INTO sem2 (digital_id, Mathematics2, EnglishLiterature, History, avg_grade)
+VALUES(4, 'A-', 'B+', 'A', 'B+');
+INSERT INTO sem2 (digital_id, Mathematics2, EnglishLiterature, History, avg_grade)
+VALUES(5, 'B', 'A', 'B', 'B');
+  -- Add more rows as needed
+
+commit;
